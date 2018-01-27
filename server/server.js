@@ -1,9 +1,16 @@
- const http = require('http')
- const bodyParser = require('body-parser')
+const http = require('http')
+const App = require('./App')
+const app = new App()
 
- http.createServer(function(request, response){
-     response.statusCode = 200;
-     response.statusMessage = 'OK';
-     response.write('1');
-     response.end();
- }).listen(3000);
+app.listen(3001);
+
+app.use(() => {
+     console.log('------>')
+})
+
+/* http.createServer(function(request, response){
+     response.statusCode = 200
+     response.statusMessage = 'OK'
+     response.write('1')
+     response.end()
+ }).listen(3000)*/
