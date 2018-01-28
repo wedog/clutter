@@ -1,5 +1,6 @@
 const http = require('http')
-const Router = Symbol('Router')
+const Router = require('./Router')
+const router = Symbol('router')
 
 class App {
     constructor(req, res) {
@@ -20,12 +21,15 @@ class App {
 
     use(fn) {
         console.log('------use------>')
-        this[Router]()
+        this[router]()
         return this
     }
 
-    [Router]() {
-        console.log('------router------>')
+    [router]() {
+        if(!this.$router){
+            this.$router = new Router()
+            console.log('------router------>')
+        }
     }
 }
 
