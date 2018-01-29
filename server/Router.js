@@ -5,6 +5,7 @@ class Router {
 
     use(fn) {
 
+        return this
     }
 
 }

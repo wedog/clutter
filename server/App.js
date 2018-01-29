@@ -1,6 +1,7 @@
 const http = require('http')
 const Router = require('./Router')
 const router = Symbol('router')
+const Query = require('./middleware/Query');
 
 class App {
     constructor(req, res) {
@@ -29,6 +30,7 @@ class App {
         if(!this.$router){
             this.$router = new Router()
             console.log('------router------>')
+            this.$router.use(Query.query());
         }
     }
 }
