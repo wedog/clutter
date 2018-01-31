@@ -4,7 +4,7 @@ const router = Symbol('router')
 const Query = require('./middleware/Query');
 
 class App {
-    constructor(req, res) {
+    constructor(req, res, next) {
         console.log('------constructor------>')
         this.server = http.createServer((req, res) => {
             console.log('------createServer------>')
@@ -13,6 +13,11 @@ class App {
             res.write('1')
             res.end()
         })
+        this.handle(req, res, next)
+    }
+
+    handle(req, res, callback) {
+        let router = this.$router;
     }
 
     listen() {

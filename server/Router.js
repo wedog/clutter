@@ -11,6 +11,10 @@ class Router {
         return this
     }
 
+    handle(req, res, out) {
+
+    }
+
 }
 
 exports = module.exports = Router
