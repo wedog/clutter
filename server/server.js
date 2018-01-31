@@ -2,11 +2,11 @@ const http = require('http')
 const App = require('./App')
 const app = new App()
 
-app.listen(3001);
-
 app.use(() => {
-     console.log('------>')
+    console.log('------>')
 })
+
+app.listen(3001);
 
 /* http.createServer(function(request, response){
      response.statusCode = 200

@@ -27,7 +27,7 @@ class App {
     }
 
     [router]() {
-        if(!this.$router){
+        if (!this.$router) {
             this.$router = new Router()
             console.log('------router------>')
             this.$router.use(Query.query());
