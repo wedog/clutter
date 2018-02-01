@@ -13,11 +13,12 @@ class App {
             res.write('1')
             res.end()
         })
-        this.handle(req, res, next)
+        //this.handle(req, res, next)
     }
 
     handle(req, res, callback) {
-        let router = this.$router;
+        let router = this.$router
+        router.handle(req, res, callback)
     }
 
     listen() {
