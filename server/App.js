@@ -6,13 +6,13 @@ const Query = require('./middleware/Query');
 class App {
     constructor(req, res, next) {
         console.log('------constructor------>')
-        this.server = http.createServer((req, res) => {
+        /*this.server = http.createServer((req, res) => {
             console.log('------createServer------>')
             res.statusCode = 200
             res.statusMessage = 'OK'
             res.write('1')
             res.end()
-        })
+        })*/
         //this.handle(req, res, next)
     }
 
@@ -22,7 +22,8 @@ class App {
     }
 
     listen() {
-        let server = this.server
+        // let server = this.server
+        let server = http.createServer(this.handle)
         return server.listen.apply(server, arguments)
     }
 
