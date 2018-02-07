@@ -4,6 +4,7 @@ const parseUrl = require('parseurl');
 class Router {
     constructor() {
         this.stack = []
+        this.handle = this.handle.bind(this);
     }
 
     use(fn) {
@@ -15,21 +16,24 @@ class Router {
     handle(req, res, out) {
         let idx = 0
         let protohost = this.getProtohost(req.url) || ''
-        req.next = next
-        next()
+        req.next = this.next
+        this.next(req, res, out, idx)
+    }
 
-        function next() {
-            let math
-            let layer
-            let route
-            let path = this.getPathname(req)
-            while (match !== true && idx < this.stack.length) {
-                layer = stack[idx++];
-                match = this.matchLayer(layer, path);
-                route = layer.route;
-                let method = req.method;
-                let has_method = route._handles_method(method);
+    next(req, res, out, idx) {
+        let match
+        let layer
+        let route
+        let path = this.getPathname(req)
+        while (match !== true && idx < this.stack.length) {
+            layer = this.stack[idx++];
+            match = this.matchLayer(layer, path);
+            route = layer.route;
+            if (!route) {
+                continue
             }
+            let method = req.method;
+            let has_method = route._handles_method(method);
         }
     }
 

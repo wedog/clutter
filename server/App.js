@@ -13,17 +13,22 @@ class App {
             res.write('1')
             res.end()
         })*/
-        //this.handle(req, res, next)
+        this.handle = this.handle.bind(this)
     }
 
     handle(req, res, callback) {
         let router = this.$router
+        if (!router) {
+            console.log('----no match router----->')
+            return
+        }
         router.handle(req, res, callback)
     }
 
     listen() {
         // let server = this.server
         let server = http.createServer(this.handle)
+        //server.$router = this.$router
         return server.listen.apply(server, arguments)
     }
 
