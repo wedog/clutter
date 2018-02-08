@@ -13,6 +13,18 @@ class Layer {
         this.regexp.fast_slash = path === '/' && opts.end === false
     }
 
+    handle_request(req, res, next) {
+        let fn = this.handle
+        if (fn.length > 3) {
+            return next();
+        }
+        try {
+            fn(req, res, next)
+        } catch (err) {
+            next(err)
+        }
+    }
+
     match(path) {
         if (path != null) {
             if (this.regexp.fast_slash) {
