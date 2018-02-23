@@ -2,6 +2,7 @@ const http = require('http')
 const Router = require('./Router')
 const router = Symbol('router')
 const Query = require('./middleware/Query');
+const Middleware = require('./middleware/Middleware');
 
 class App {
     constructor(req, res, next) {
@@ -43,6 +44,7 @@ class App {
             this.$router = new Router()
             console.log('------router------>')
             this.$router.use(Query.query());
+            this.$router.use(Middleware.init(this));
         }
     }
 }

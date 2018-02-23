@@ -26,6 +26,7 @@ class Layer {
     }
 
     match(path) {
+        let match;
         if (path != null) {
             if (this.regexp.fast_slash) {
                 this.params = {}

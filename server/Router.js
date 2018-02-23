@@ -41,6 +41,11 @@ class Router {
             let method = req.method
             let has_method = route._handles_method(method)
         }
+        if (match !== true) {
+            console.log(11)
+            return;
+            //return done(layerError);
+        }
         let trim_prefix = this.trim_prefix
         let layerPath = layer.path
         this.process_params(layer, paramcalled, req, res, function (err) {
