@@ -7,6 +7,7 @@ class Router {
         this.handle = this.handle.bind(this)
         this.next = this.next.bind(this)
         this.trim_prefix = this.trim_prefix.bind(this)
+        this.idx = 0
     }
 
     use(fn) {
@@ -31,8 +32,8 @@ class Router {
             ? null
             : err
         let path = this.getPathname(req)
-        while (match !== true && idx < this.stack.length) {
-            layer = this.stack[idx++]
+        while (match !== true && this.idx < this.stack.length) {
+            layer = this.stack[this.idx++]
             match = this.matchLayer(layer, path)
             route = layer.route
             if (!route) {

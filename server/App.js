@@ -3,6 +3,9 @@ const Router = require('./Router')
 const router = Symbol('router')
 const Query = require('./middleware/Query');
 const Middleware = require('./middleware/Middleware');
+const compileETag = require('./utils').compileETag;
+const compileQueryParser = require('./utils').compileQueryParser;
+const compileTrust = require('./utils').compileTrust;
 
 class App {
     constructor(req, res, next) {
@@ -14,7 +17,9 @@ class App {
             res.write('1')
             res.end()
         })*/
+        this.settings = {};
         this.handle = this.handle.bind(this)
+        this.enabled = this.enabled.bind(this)
     }
 
     handle(req, res, callback) {
@@ -37,6 +42,37 @@ class App {
         console.log('------use------>')
         this[router]()
         return this
+    }
+
+    enabled(setting) {
+        return Boolean(this.set(setting));
+    }
+
+    set(setting, val) {
+        if (arguments.length === 1) {
+            return this.settings[setting];
+        }
+        this.settings[setting] = val;
+        switch (setting) {
+            case 'etag':
+                this.set('etag fn', compileETag(val));
+                break;
+            case 'query parser':
+                this.set('query parser fn', compileQueryParser(val));
+                break;
+            case 'trust proxy':
+                this.set('trust proxy fn', compileTrust(val));
+
+                // trust proxy inherit back-compat
+                Object.defineProperty(this.settings, trustProxyDefaultSymbol, {
+                    configurable: true,
+                    value: false
+                });
+
+                break;
+        }
+
+        return this;
     }
 
     [router]() {

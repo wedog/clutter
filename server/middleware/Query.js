@@ -20,7 +20,7 @@ class Query {
                 let val = parseUrl(req).query
                 req.query = queryParse(val, opts)
             }
-            next()
+            next(req, res)
         };
     }
 }
