@@ -1,11 +1,13 @@
 const http = require('http')
 const Router = require('./Router')
 const router = Symbol('router')
-const Query = require('./middleware/Query');
-const Middleware = require('./middleware/Middleware');
-const compileETag = require('./utils').compileETag;
-const compileQueryParser = require('./utils').compileQueryParser;
-const compileTrust = require('./utils').compileTrust;
+const Query = require('./middleware/Query')
+const Middleware = require('./middleware/Middleware')
+const compileETag = require('./utils').compileETag
+const compileQueryParser = require('./utils').compileQueryParser
+const compileTrust = require('./utils').compileTrust
+const flatten = require('array-flatten')
+const slice = Array.prototype.slice
 
 class App {
     constructor(req, res, next) {
@@ -20,6 +22,7 @@ class App {
         this.settings = {};
         this.handle = this.handle.bind(this)
         this.enabled = this.enabled.bind(this)
+        this.use = this.use.bind(this)
     }
 
     handle(req, res, callback) {
@@ -40,7 +43,26 @@ class App {
 
     use(fn) {
         console.log('------use------>')
+        let offset = 0
+        let path = '/'
+        if (typeof fn !== 'function') {
+            let arg = fn
+            while (Array.isArray(arg) && arg.length !== 0) {
+                arg = arg[0]
+            }
+            if (typeof arg !== 'function') {
+                offset = 1
+                path = fn
+            }
+        }
+        var fns = flatten(slice.call(arguments, offset));
         this[router]()
+        let $router = this.$router
+        fns.forEach(function (fn) {
+            if (!fn || !fn.handle || !fn.set) {
+                return $router.use(path, fn);
+            }
+        }, this)
         return this
     }
 

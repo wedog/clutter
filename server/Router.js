@@ -1,18 +1,37 @@
 const Layer = require('./Layer')
 const parseUrl = require('parseurl')
+const flatten = require('array-flatten');
+const slice = Array.prototype.slice
 
 class Router {
     constructor() {
         this.stack = []
         this.handle = this.handle.bind(this)
+        this.use = this.use.bind(this)
         this.next = this.next.bind(this)
         this.trim_prefix = this.trim_prefix.bind(this)
         this.idx = 0
     }
 
     use(fn) {
-        let layer = new Layer('/', fn)
-        this.stack.push(layer)
+        let offset = 0
+        let path = '/'
+        if (typeof fn !== 'function') {
+            let arg = fn;
+            while (Array.isArray(arg) && arg.length !== 0) {
+                arg = arg[0];
+            }
+            if (typeof arg !== 'function') {
+                offset = 1;
+                path = fn;
+            }
+        }
+        let callbacks = flatten(slice.call(arguments, offset))
+        for (var i = 0; i < callbacks.length; i++) {
+            var fn = callbacks[i];
+            let layer = new Layer(path, fn)
+            this.stack.push(layer)
+        }
         return this
     }
 

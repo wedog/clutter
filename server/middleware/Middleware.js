@@ -11,10 +11,10 @@ class Middleware {
             req.res = res;
             res.req = req;
             req.next = next;
-            setPrototypeOf(req, app.request)
-            setPrototypeOf(res, app.response)
+            //setPrototypeOf(req, app.request)
+            //setPrototypeOf(res, app.response)
             res.locals = res.locals || Object.create(null);
-            next();
+            next(req, res);
         };
     }
 }

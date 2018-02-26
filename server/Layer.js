@@ -7,7 +7,7 @@ class Layer {
         this.handle = fn
         this.name = fn.name || '<anonymous>';
         this.params = undefined;
-        this.path = undefined;
+        this.path = path;
         this.regexp = pathRegexp(path, this.keys = [], opts);
         this.regexp.fast_star = path === '*'
         this.regexp.fast_slash = path === '/' && opts.end === false
